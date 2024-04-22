@@ -10,6 +10,8 @@ bitflags! {
     pub(crate) struct Flag: u32 {
         /// Forces certain checks to continue running even if they hit an error.
         const KEEP_GOING = 1 << 0;
+        /// silences most tests by passing quiet to their run commands
+        const QUIET = 1 << 1;
     }
 }
 

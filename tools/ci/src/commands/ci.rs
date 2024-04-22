@@ -10,6 +10,9 @@ pub(crate) struct CI {
     /// continue running commands even if one fails
     #[argh(switch)]
     keep_going: bool,
+    /// silence output from successful tests
+    #[argh(switch)]
+    quiet: bool,
 }
 
 impl CI {
@@ -55,6 +58,9 @@ impl CI {
 
         if self.keep_going {
             flags |= Flag::KEEP_GOING;
+        }
+        if self.quiet {
+            flags |= Flag::QUIET;
         }
 
         match &self.command {
