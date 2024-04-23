@@ -8,9 +8,17 @@ use xshell::cmd;
 pub(crate) struct BenchCheckCommand {}
 
 impl Prepare for BenchCheckCommand {
-    fn prepare<'a>(&self, sh: &'a xshell::Shell, _flags: Flag) -> Vec<PreparedCommand<'a>> {
+    fn prepare<'a>(&self, sh: &'a xshell::Shell, flags: Flag) -> Vec<PreparedCommand<'a>> {
+        let quiet_flag = flags
+            .contains(Flag::QUIET)
+            .then_some("--quiet")
+            .unwrap_or_default();
+
         vec![PreparedCommand::new::<Self>(
-            cmd!(sh, "cargo check --benches --target-dir ../target"),
+            cmd!(
+                sh,
+                "cargo check --benches --target-dir ../target {quiet_flag}"
+            ),
             "Failed to check the benches.",
         )]
     }

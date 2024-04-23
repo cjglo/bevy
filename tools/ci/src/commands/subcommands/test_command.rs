@@ -13,11 +13,15 @@ impl Prepare for TestCommand {
             .contains(Flag::KEEP_GOING)
             .then_some("--no-fail-fast")
             .unwrap_or_default();
+        let quiet_flag = flags
+            .contains(Flag::QUIET)
+            .then_some("--quiet")
+            .unwrap_or_default();
 
         vec![PreparedCommand::new::<Self>(
             cmd!(
                 sh,
-                "cargo test --workspace --lib --bins --tests --benches {no_fail_fast}"
+                "cargo test --workspace --lib --bins --tests --benches {no_fail_fast} {quiet_flag}"
             ),
             "Please fix failing tests in output above.",
         )]

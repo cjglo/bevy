@@ -8,9 +8,14 @@ use xshell::cmd;
 pub(crate) struct CompileCheckCommand {}
 
 impl Prepare for CompileCheckCommand {
-    fn prepare<'a>(&self, sh: &'a xshell::Shell, _flags: Flag) -> Vec<PreparedCommand<'a>> {
+    fn prepare<'a>(&self, sh: &'a xshell::Shell, flags: Flag) -> Vec<PreparedCommand<'a>> {
+        let quiet_flag = flags
+            .contains(Flag::QUIET)
+            .then_some("--quiet")
+            .unwrap_or_default();
+
         vec![PreparedCommand::new::<Self>(
-            cmd!(sh, "cargo check --workspace"),
+            cmd!(sh, "cargo check --workspace {quiet_flag}"),
             "Please fix compiler errors in output above.",
         )]
     }

@@ -13,6 +13,10 @@ impl Prepare for CompileFailCommand {
             .contains(Flag::KEEP_GOING)
             .then_some("--no-fail-fast")
             .unwrap_or_default();
+        let quiet_flag = flags
+            .contains(Flag::QUIET)
+            .then_some("--quiet")
+            .unwrap_or_default();
 
         let mut commands = vec![];
 
@@ -21,7 +25,7 @@ impl Prepare for CompileFailCommand {
         // - See crates/bevy_ecs_compile_fail_tests/README.md
         commands.push(
             PreparedCommand::new::<Self>(
-                cmd!(sh, "cargo test --target-dir ../../target {no_fail_fast}"),
+                cmd!(sh, "cargo test --target-dir ../../target {no_fail_fast} {quiet_flag}"),
                 "Compiler errors of the ECS compile fail tests seem to be different than expected! Check locally and compare rust versions.",
             )
             .with_subdir("crates/bevy_ecs_compile_fail_tests"),
@@ -32,7 +36,7 @@ impl Prepare for CompileFailCommand {
         // - See crates/bevy_reflect_compile_fail_tests/README.md
         commands.push(
             PreparedCommand::new::<Self>(
-                cmd!(sh, "cargo test --target-dir ../../target {no_fail_fast}"),
+                cmd!(sh, "cargo test --target-dir ../../target {no_fail_fast} {quiet_flag}"),
                 "Compiler errors of the Reflect compile fail tests seem to be different than expected! Check locally and compare rust versions.",
             )
             .with_subdir("crates/bevy_reflect_compile_fail_tests"),
@@ -43,7 +47,7 @@ impl Prepare for CompileFailCommand {
         // - See crates/bevy_macros_compile_fail_tests/README.md
         commands.push(
             PreparedCommand::new::<Self>(
-                cmd!(sh, "cargo test --target-dir ../../target {no_fail_fast}"),
+                cmd!(sh, "cargo test --target-dir ../../target {no_fail_fast} {quiet_flag}"),
                 "Compiler errors of the macros compile fail tests seem to be different than expected! Check locally and compare rust versions.",
             )
             .with_subdir("crates/bevy_macros_compile_fail_tests"),
